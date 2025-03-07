@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>동적 블로그 메인 페이지</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f4f4f4;
+    }
+    header {
+      background-color: #333;
+      color: #fff;
+      padding: 10px 0;
+      text-align: center;
+    }
+    .container {
+      width: 80%;
+      margin: 20px auto;
+    }
+    .post {
+      background-color: #fff;
+      margin-bottom: 20px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      transform: translateY(20px);
+      opacity: 0;
+      animation: fadeInUp 0.5s forwards;
+    }
+    @keyframes fadeInUp {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+    .post h2 {
+      margin-top: 0;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>내 동적 블로그</h1>
+  </header>
+  <div class="container" id="posts-container">
+    <!-- 블로그 게시물이 동적으로 삽입됩니다 -->
+  </div>
+  <script>
+    const posts = [
+      { title: '게시물 1', content: '이것은 게시물 1의 내용입니다.' },
+      { title: '게시물 2', content: '이것은 게시물 2의 내용입니다.' },
+      { title: '게시물 3', content: '이것은 게시물 3의 내용입니다.' }
+    ];
+
+    const postsContainer = document.getElementById('posts-container');
+
+    posts.forEach(post => {
+      const postElement = document.createElement('div');
+      postElement.classList.add('post');
+      postElement.innerHTML = `
+        <h2>${post.title}</h2>
+        <p>${post.content}</p>
+      `;
+      postsContainer.appendChild(postElement);
+    });
+
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.1 });
+
+    document.querySelectorAll('.post').forEach(post => {
+      observer.observe(post);
+    });
+  </script>
+</body>
+</html>
